@@ -65,6 +65,9 @@ export default function SignUpPage() {
         password: data.password,
         callbackURL: "/dashboard"
       });
+      if (result) {
+       router.replace("/dashboard");;
+      }
     }finally {
       setIsLoading(false);
     }
