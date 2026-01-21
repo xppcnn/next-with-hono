@@ -63,13 +63,8 @@ export default function SignUpPage() {
         name: data.name,
         email: data.email,
         password: data.password,
+        callbackURL: "/dashboard"
       });
-      console.log(result, error);
-
-      if (!error && result) {
-        // 注册成功，自动登录后重定向到首页
-        router.push("/");
-      }
     }finally {
       setIsLoading(false);
     }

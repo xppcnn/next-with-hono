@@ -1,5 +1,3 @@
-import { Header } from "@/components/Header";
-
 export default function AuthLayout({
   children,
 }: {
@@ -7,9 +5,6 @@ export default function AuthLayout({
 }) {
   return (
     <>
-      <div className="hidden">
-        <Header />
-      </div>
       {children}
     </>
   );

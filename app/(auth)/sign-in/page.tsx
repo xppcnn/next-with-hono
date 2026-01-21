@@ -47,21 +47,7 @@ export default function SignInPage() {
       const { data: result, error } = await authClient.signIn.email({
         email: data.email,
         password: data.password,
-      });
-
-      if (!error && result) {
-        // 登录成功，重定向到首页
-        router.push("/");
-      } else {
-        form.setError("email", {
-          type: "manual",
-          message: error?.message || "邮箱或密码错误",
-        });
-      }
-    } catch (error) {
-      form.setError("email", {
-        type: "manual",
-        message: "登录失败，请稍后重试",
+        callbackURL: "/dashboard"
       });
     } finally {
       setIsLoading(false);
