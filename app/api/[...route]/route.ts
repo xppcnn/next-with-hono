@@ -1,12 +1,7 @@
-import { Hono } from 'hono'
-import { handle } from 'hono/vercel'
+import { handle } from "hono/vercel";
+import server from "@/server";
 
-const app = new Hono().basePath('/api')
-
-app.get('/hello', (c) => {
-  return c.json({
-    message: 'Hello from Hono!'
-  })
-})
-
-export const GET = handle(app)
+export const GET = handle(server);
+export const POST = handle(server);
+export const PUT = handle(server);
+export const DELETE = handle(server);
