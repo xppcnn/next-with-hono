@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   postgres:
     image: postgres:16-alpine
@@ -16,6 +18,37 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - app-network
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        RESEND_API_KEY: ${RESEND_API_KEY}
+        RESEND_FROM_EMAIL: ${RESEND_FROM_EMAIL}
+    container_name: next-with-hono-app
+    restart: unless-stopped
+    ports:
+      - "7788:3000"
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/next-with-hono
+      BETTER_AUTH_SECRET: next-with-hono
+      BETTER_AUTH_URL: http://localhost:7788
+      NEXT_PUBLIC_API_URL: http://localhost:7788
+      NODE_ENV: production
+      RESEND_API_KEY: re_FQey2qbq_CpR1rZnoTZNmaXPkQdd6YqEv
+      RESEND_FROM_EMAIL: onboarding@resend.dev
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - app-network
 
 volumes:
   postgres_data:
+
+networks:
+  app-network:
+    driver: bridge

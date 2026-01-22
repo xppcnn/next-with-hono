@@ -1,7 +1,6 @@
-import { handle } from "hono/vercel";
 import server from "@/server";
 
-export const GET = handle(server);
-export const POST = handle(server);
-export const PUT = handle(server);
-export const DELETE = handle(server);
+export const GET = (req: Request) => server.fetch(req);
+export const POST = (req: Request) => server.fetch(req);
+export const PUT = (req: Request) => server.fetch(req);
+export const DELETE = (req: Request) => server.fetch(req);
