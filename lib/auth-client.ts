@@ -1,5 +1,6 @@
 
 import { createAuthClient } from "better-auth/react";
+import { adminClient, organizationClient } from "better-auth/client/plugins"
 import { toast } from "sonner";
 
 export const authClient = createAuthClient({
@@ -14,4 +15,5 @@ export const authClient = createAuthClient({
       toast.error(message);
     },
   },
+  plugins: [adminClient(), organizationClient()],
 });

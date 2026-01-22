@@ -1,4 +1,5 @@
 import { betterAuth } from "better-auth";
+import { admin, organization} from "better-auth/plugins";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "@/db"; // your drizzle instance
 import { sendEmail } from "@/lib/email";
@@ -51,8 +52,6 @@ export const auth = betterAuth({
   secret: process.env.BETTER_AUTH_SECRET,
   basePath: "/api/auth",
   baseURL: process.env.BETTER_AUTH_URL,
-  trustedOrigins: [
-    process.env.BETTER_AUTH_URL || "http://localhost:6688",
-  ],
-  plugins: [],
+  trustedOrigins: [process.env.BETTER_AUTH_URL || "http://localhost:6688"],
+  plugins: [admin(),organization()],
 });
