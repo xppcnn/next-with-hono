@@ -1,13 +1,56 @@
 import { betterAuth } from "better-auth";
-import { admin, organization} from "better-auth/plugins";
+import { admin, organization } from "better-auth/plugins";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "@/db"; // your drizzle instance
 import { sendEmail } from "@/lib/email";
+import {
+  member,
+  organization as organizationTable,
+} from "@/db/schema/auth-schema";
+import { eq, and } from "drizzle-orm";
+
+// 获取用户的初始组织（优先 owner 的组织，否则返回第一个组织）
+const getInitialOrganization = async (userId: string) => {
+  // 先尝试获取 owner 的组织
+  const oMember = await db
+    .select()
+    .from(member)
+    .where(and(eq(member.userId, userId), eq(member.role, "owner")))
+    .limit(1);
+
+  if (oMember.length > 0) {
+    return oMember[0];
+  }
+  const userMember = await db
+    .select()
+    .from(member)
+    .where(eq(member.userId, userId))
+    .limit(1);
+
+  return userMember[0] ?? null;
+};
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: "pg", // or "mysql", "sqlite"
   }),
+  databaseHooks: {
+    session: {
+      create: {
+        before: async (session) => {
+          // 设置初始活跃组织
+          const userOrg = await getInitialOrganization(session.userId);
+          console.log("🚀 ~ userOrg:", userOrg);
+          return {
+            data: {
+              ...session,
+              activeOrganizationId: userOrg?.organizationId,
+            },
+          };
+        },
+      },
+    },
+  },
   emailAndPassword: {
     enabled: true,
     sendResetPassword: async ({ user, url }, request) => {
@@ -53,5 +96,5 @@ export const auth = betterAuth({
   basePath: "/api/auth",
   baseURL: process.env.BETTER_AUTH_URL,
   trustedOrigins: [process.env.BETTER_AUTH_URL || "http://localhost:6688"],
-  plugins: [admin(),organization()],
+  plugins: [admin(), organization()],
 });

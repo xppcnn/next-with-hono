@@ -57,20 +57,30 @@ export default function SignUpPage() {
   });
 
   async function onSubmit(data: SignUpFormValues) {
-    setIsLoading(true);
-    try {
-      const { data: result, error } = await authClient.signUp.email({
-        name: data.name,
-        email: data.email,
-        password: data.password,
-        callbackURL: "/dashboard"
-      });
-      if (result) {
-       router.replace("/dashboard");;
+
+    const { data: result, error } = await authClient.signUp.email({
+      name: data.name,
+      email: data.email,
+      password: data.password,
+      callbackURL: "/dashboard",
+    }, {
+      onRequest: () => {
+        setIsLoading(true);
+      },
+      onSuccess: async (ctx) => {
+        setIsLoading(false);
+        const { user } = ctx.data
+        const { data:organ, error } = await authClient.organization.create({
+          name: user.name, // required
+          slug: user.email.split("@")[0], // required
+          logo: "https://example.com/logo.png",
+          metadata: {},
+          userId: user.id,
+          keepCurrentActiveOrganization: false,
+        });
+        router.replace("/dashboard");
       }
-    }finally {
-      setIsLoading(false);
-    }
+    });
   }
 
   return (

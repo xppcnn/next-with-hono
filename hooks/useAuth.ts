@@ -3,7 +3,12 @@
 import { authClient } from "@/lib/auth-client";
 
 export function useAuth() {
-  const { data: session, isPending: isLoading, error } = authClient.useSession();
+  const {
+    data: session,
+    isPending: isLoading,
+    error,
+    refetch,
+  } = authClient.useSession();
 
   const signOut = async () => {
     try {
@@ -26,5 +31,6 @@ export function useAuth() {
     isAuthenticated: !!session?.user,
     user: session?.user || null,
     signOut,
+    refetch,
   };
 }
