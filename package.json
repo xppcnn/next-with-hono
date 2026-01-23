@@ -3,6 +3,7 @@
   "type": "module",
   "scripts": {
     "dev": "next dev --port=6688",
+    "dev:server": "tsx mastra/hono-server.ts",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
@@ -13,6 +14,12 @@
   "dependencies": {
     "@hono/node-server": "^1.19.9",
     "@hookform/resolvers": "^5.2.2",
+    "@mastra/core": "^1.0.4",
+    "@mastra/hono": "^1.0.1",
+    "@mastra/libsql": "^1.0.0",
+    "@mastra/loggers": "^1.0.0",
+    "@mastra/memory": "^1.0.0",
+    "@mastra/observability": "^1.0.0",
     "@radix-ui/react-accordion": "^1.2.12",
     "@radix-ui/react-alert-dialog": "^1.1.15",
     "@radix-ui/react-aspect-ratio": "^1.1.8",
@@ -45,11 +52,13 @@
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
     "date-fns": "^4.1.0",
+    "dotenv": "^17.2.3",
     "drizzle-orm": "^0.45.1",
     "embla-carousel-react": "^8.6.0",
     "hono": "^4.11.4",
     "input-otp": "^1.4.2",
     "lucide-react": "^0.562.0",
+    "mastra": "^1.0.1",
     "next": "15.5.2",
     "next-themes": "^0.4.6",
     "pg": "^8.17.2",
@@ -77,6 +86,7 @@
     "drizzle-kit": "^0.31.8",
     "eslint": "^9",
     "eslint-config-next": "15.5.2",
+    "tsx": "^4.21.0",
     "typescript": "^5"
   }
 }
