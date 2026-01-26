@@ -205,8 +205,8 @@ export function highlightCode(
 
       const tokenized: TokenizedCode = {
         tokens: result.tokens,
-        fg: result.fg,
-        bg: result.bg,
+        fg: result.fg ?? 'inherit',
+        bg: result.bg ?? 'transparent',
       };
 
       // Cache the result
@@ -296,6 +296,7 @@ const CodeBlockBody = memo(
     prevProps.showLineNumbers === nextProps.showLineNumbers &&
     prevProps.className === nextProps.className
 );
+CodeBlockBody.displayName = 'CodeBlockBody';
 
 export const CodeBlockContainer = ({
   className,
@@ -496,7 +497,6 @@ export const CodeBlockLanguageSelectorTrigger = ({
       "h-7 border-none bg-transparent px-2 text-xs shadow-none",
       className
     )}
-    size="sm"
     {...props}
   />
 );

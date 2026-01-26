@@ -1,6 +1,10 @@
 {
   "name": "next-with-hono",
   "type": "module",
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=8.0.0"
+  },
   "scripts": {
     "dev": "next dev --port=6688",
     "dev:server": "tsx mastra/index.ts",

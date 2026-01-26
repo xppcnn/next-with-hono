@@ -73,4 +73,9 @@ const CardFooter = React.forwardRef<
 ))
 CardFooter.displayName = "CardFooter"
 
-export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }
+type CardActionProps = React.HTMLAttributes<HTMLDivElement>;
+ const CardAction = ({ className, ...props }: CardActionProps) => (
+  <div className={cn("flex items-center p-6 pt-0", className)} {...props} />
+);
+CardAction.displayName = "CardAction"
+export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent, CardAction }

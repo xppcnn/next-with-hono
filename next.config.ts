@@ -12,15 +12,8 @@ const nextConfig: NextConfig = {
     }
     return config;
   },
-  transpilePackages: ['@mastra/core', '@mastra/libsql', '@mastra/memory'],
-  // 在构建时忽略 ESLint 错误（生产环境建议修复这些错误）
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  // 在构建时忽略 TypeScript 错误（生产环境建议修复这些错误）
-  typescript: {
-    ignoreBuildErrors: true,
-  },
+  serverExternalPackages: ['@libsql/client', 'libsql'],
+  // transpilePackages: ['@mastra/core', '@mastra/libsql', '@mastra/memory'],
 }
 
 export default nextConfig

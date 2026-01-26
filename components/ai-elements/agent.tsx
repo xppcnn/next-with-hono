@@ -79,12 +79,25 @@ export type AgentToolsProps = Omit<ComponentProps<typeof Accordion>, 'type'> & {
   type?: "single" | "multiple";
 };
 
-export const AgentTools = memo(({ className, type = "multiple", ...props }: AgentToolsProps) => (
-  <div className={cn("space-y-2", className)}>
-    <span className="font-medium text-muted-foreground text-sm">Tools</span>
-    <Accordion className="rounded-md border" type={type} {...(props as any)} />
-  </div>
-));
+export const AgentTools = memo(({ className, type = "multiple", ...props }: AgentToolsProps) => {
+  // Extract type from props to avoid duplicate
+  const propsWithType = props as ComponentProps<typeof Accordion> & { type?: "single" | "multiple" };
+  const { type: propsType, ...restProps } = propsWithType;
+  const accordionType = type || propsType || "multiple";
+  
+  return (
+    <div className={cn("space-y-2", className)}>
+      <span className="font-medium text-muted-foreground text-sm">Tools</span>
+      {accordionType === "multiple" ? (
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        <Accordion className="rounded-md border" type="multiple" {...(restProps as any)} />
+      ) : (
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        <Accordion className="rounded-md border" type="single" {...(restProps as any)} />
+      )}
+    </div>
+  );
+});
 
 export type AgentToolProps = ComponentProps<typeof AccordionItem> & {
   tool: Tool;
