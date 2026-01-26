@@ -22,5 +22,11 @@ export const weatherAgent = new Agent({
   model: 'openrouter/deepseek/deepseek-v3.2',
   tools: { weatherTool },
 
-  memory: new Memory(),
+  // 配置 Memory：只保留最近 10 条消息，优化 token 使用
+  // 每次请求时，Memory 会自动从存储中获取这 10 条消息
+  memory: new Memory({
+    options: {
+      lastMessages: 10, // 只保留最近 10 条消息，可根据需要调整
+    },
+  }),
 });
