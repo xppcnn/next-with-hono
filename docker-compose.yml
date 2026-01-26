@@ -26,25 +26,47 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        RESEND_API_KEY: ${RESEND_API_KEY}
-        RESEND_FROM_EMAIL: ${RESEND_FROM_EMAIL}
+        RESEND_API_KEY: ${RESEND_API_KEY:-}
+        RESEND_FROM_EMAIL: ${RESEND_FROM_EMAIL:-}
     container_name: next-with-hono-app
     restart: unless-stopped
     ports:
-      - "7788:3000"
+      - "${APP_PORT:-7788}:3000"
     environment:
+      # Database
       DATABASE_URL: postgresql://postgres:postgres@postgres:5432/next-with-hono
-      BETTER_AUTH_SECRET: next-with-hono
-      BETTER_AUTH_URL: http://localhost:7788
-      NEXT_PUBLIC_API_URL: http://localhost:7788
+      
+      # Auth
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET:-next-with-hono-secret-change-in-production}
+      BETTER_AUTH_URL: ${BETTER_AUTH_URL:-http://localhost:7788}
+      
+      # API
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:7788}
+      
+      # Email (Resend)
+      RESEND_API_KEY: ${RESEND_API_KEY:-}
+      RESEND_FROM_EMAIL: ${RESEND_FROM_EMAIL:-}
+      
+      # Node
       NODE_ENV: production
-      RESEND_API_KEY: re_FQey2qbq_CpR1rZnoTZNmaXPkQdd6YqEv
-      RESEND_FROM_EMAIL: onboarding@resend.dev
+      PORT: 3000
+      
+      # Mastra (if needed)
+      MASTRA_CLOUD_ACCESS_TOKEN: ${MASTRA_CLOUD_ACCESS_TOKEN:-}
+      
+      # OpenRouter (if needed)
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
     depends_on:
       postgres:
         condition: service_healthy
     networks:
       - app-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/api/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
 volumes:
   postgres_data:
