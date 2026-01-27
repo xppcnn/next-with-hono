@@ -31,10 +31,16 @@ import {
 } from "@/components/ui/sidebar"
 import { useAuth } from '@/hooks/useAuth'
 import { useRouter } from 'next/navigation'
+import { redirect } from 'next/navigation'
 export function NavUser() {
   const router = useRouter()
   const { isMobile } = useSidebar()
-  const { signOut, user } = useAuth()
+  const { signOut, user, error } = useAuth()
+
+
+  if (error) {
+    return redirect("/sign-in")
+  }
 
   return (
     <SidebarMenu>
