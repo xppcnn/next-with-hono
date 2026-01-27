@@ -17,9 +17,17 @@
 /.next/
 /out/
 .vscode
+
+.claude
+.cursor
+.agents
+.agent
+.gemini
+
 # production
 /build
 
+skills/
 # misc
 .DS_Store
 *.pem
